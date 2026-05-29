@@ -1,0 +1,187 @@
+--===================================================================================--
+--            SAHER HUB — DARK RED MENU WITH FE RAINBOW RGB BORDERS                 --
+--===================================================================================--
+
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local player = Players.LocalPlayer
+
+local MainGui = Instance.new("ScreenGui")
+MainGui.Name = "SaherRainbowHub"
+MainGui.Parent = player:WaitForChild("PlayerGui")
+MainGui.ResetOnSpawn = false
+
+---------------------------------------------------------
+-- [1] اللوحة الرئيسية (الأحمر الغامق)
+---------------------------------------------------------
+local MenuFrame = Instance.new("Frame")
+MenuFrame.Size = UDim2.new(0, 340, 0, 340) 
+MenuFrame.Position = UDim2.new(0.5, -170, 0.5, -170)
+MenuFrame.BackgroundColor3 = Color3.fromRGB(45, 10, 10) -- الأحمر الغامق الفخم
+MenuFrame.BorderSizePixel = 0
+MenuFrame.Parent = MainGui
+
+local MenuCorner = Instance.new("UICorner")
+MenuCorner.CornerRadius = UDim.new(0, 12)
+MenuCorner.Parent = MenuFrame
+
+-- إطار الحواف اللي هينور RGB
+local MenuStroke = Instance.new("UIStroke")
+MenuStroke.Thickness = 2.5 -- تزويد السُمك عشان النور يبان أحلى
+MenuStroke.Color = Color3.fromRGB(255, 0, 0)
+MenuStroke.Parent = MenuFrame
+
+-- العنوان العلوي للقائمة
+local MenuTitle = Instance.new("TextLabel")
+MenuTitle.Size = UDim2.new(1, 0, 0, 45)
+MenuTitle.Text = "SAHER HUB"
+MenuTitle.TextColor3 = Color3.fromRGB(255, 240, 240)
+MenuTitle.TextSize = 16
+MenuTitle.Font = Enum.Font.SourceSansBold
+MenuTitle.BackgroundColor3 = Color3.fromRGB(30, 5, 5) 
+MenuTitle.Parent = MenuFrame
+
+local TitleCorner = Instance.new("UICorner")
+TitleCorner.CornerRadius = UDim.new(0, 12)
+TitleCorner.Parent = MenuTitle
+
+---------------------------------------------------------
+-- [2] نظام ترتيب الأزرار التلقائي
+---------------------------------------------------------
+local Container = Instance.new("Frame")
+Container.Size = UDim2.new(1, 0, 1, -45)
+Container.Position = UDim2.new(0, 0, 0, 45)
+Container.BackgroundTransparency = 1
+Container.Parent = MenuFrame
+
+local ButtonLayout = Instance.new("UIListLayout")
+ButtonLayout.Parent = Container
+ButtonLayout.SortOrder = Enum.SortOrder.LayoutOrder
+ButtonLayout.Padding = UDim.new(0, 10)
+ButtonLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+ButtonLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+
+-- دالة مساعدة لإنشاء الأزرار الأربعة
+local function CreateScriptButton(name, layoutOrder)
+    local Btn = Instance.new("TextButton")
+    Btn.Size = UDim2.new(0, 280, 0, 48)
+    Btn.Text = name
+    Btn.TextColor3 = Color3.fromRGB(255, 230, 230)
+    Btn.BackgroundColor3 = Color3.fromRGB(65, 15, 15) 
+    Btn.TextSize = 15
+    Btn.Font = Enum.Font.SourceSansBold
+    Btn.LayoutOrder = layoutOrder
+    Btn.Parent = Container
+    
+    local BtnCorner = Instance.new("UICorner")
+    BtnCorner.CornerRadius = UDim.new(0, 8)
+    BtnCorner.Parent = Btn
+    
+    local BtnStroke = Instance.new("UIStroke")
+    BtnStroke.Thickness = 1
+    BtnStroke.Color = Color3.fromRGB(120, 20, 20) 
+    BtnStroke.Parent = Btn
+    
+    return Btn
+end
+
+-- إنشاء الـ 4 أزرار
+local Script1Btn = CreateScriptButton("Script 1", 1)
+local Script2Btn = CreateScriptButton("Script 2", 2)
+local Script3Btn = CreateScriptButton("Script 3", 3)
+local Script4Btn = CreateScriptButton("Script 4", 4)
+
+---------------------------------------------------------
+-- 🛑 هنا الأكواد بتاعتك + الإخفاء التلقائي 🛑
+---------------------------------------------------------
+Script1Btn.MouseButton1Click:Connect(function()
+    MenuFrame.Visible = false 
+    print("Script 1 Executed!")
+end)
+
+Script2Btn.MouseButton1Click:Connect(function()
+    MenuFrame.Visible = false 
+    print("Script 2 Executed!")
+end)
+
+Script3Btn.MouseButton1Click:Connect(function()
+    MenuFrame.Visible = false 
+    print("Script 3 Executed!")
+end)
+
+Script4Btn.MouseButton1Click:Connect(function()
+    MenuFrame.Visible = false 
+    print("Script 4 Executed!")
+end)
+
+---------------------------------------------------------
+-- [3] زرار الـ Open/Close مع إطار ينور RGB بردو
+---------------------------------------------------------
+local ToggleGui = Instance.new("TextButton")
+ToggleGui.Size = UDim2.new(0, 80, 0, 35)
+ToggleGui.Position = UDim2.new(0.02, 0, 0.05, 0) 
+ToggleGui.Text = "Open/Close"
+ToggleGui.TextColor3 = Color3.fromRGB(255, 220, 220)
+ToggleGui.BackgroundColor3 = Color3.fromRGB(35, 8, 8)
+ToggleGui.TextSize = 12
+ToggleGui.Font = Enum.Font.SourceSansBold
+ToggleGui.Parent = MainGui
+
+local ToggleCorner = Instance.new("UICorner")
+ToggleCorner.CornerRadius = UDim.new(0, 6)
+ToggleCorner.Parent = ToggleGui
+
+local ToggleStroke = Instance.new("UIStroke")
+ToggleStroke.Thickness = 2
+ToggleStroke.Color = Color3.fromRGB(255, 0, 0)
+ToggleStroke.Parent = ToggleGui
+
+ToggleGui.MouseButton1Click:Connect(function()
+    MenuFrame.Visible = not MenuFrame.Visible
+end)
+
+---------------------------------------------------------
+-- [4] محرك الـ RGB (تأثير قوز قزح الانسيابي للحواف)
+---------------------------------------------------------
+task.spawn(function()
+    local hue = 0
+    RunService.RenderStepped:Connect(function()
+        hue = (hue + 0.01) % 1 -- سرعة لفة الألوان (تقدر تزودها لو عايز يلف أسرع)
+        local rainbowColor = Color3.fromHSV(hue, 1, 1)
+        
+        -- تطبيق اللون المتحرك على الحواف
+        MenuStroke.Color = rainbowColor
+        ToggleStroke.Color = rainbowColor
+    end)
+end)
+
+---------------------------------------------------------
+-- [5] ميزة سحب القائمة (Drag)
+---------------------------------------------------------
+local dragging, dragInput, dragStart, startPos
+local function update(input)
+    local delta = input.Position - dragStart
+    MenuFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+MenuTitle.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = MenuFrame.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then dragging = false end
+        end)
+    end
+end)
+
+MenuTitle.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then update(input) end
+end)
